@@ -6,29 +6,36 @@ export default class Jeu {
     let classement = ""
     let i = 0
     this.score.forEach(e => {
+      if (e >= 4) {
+        classement = "Victoire " + this.joueurs[i]
+        i = 2
+        return (classement)
+      }
       if (i === 1 && e === this.score[0]) {
         e === 3 ? classement = "Egalité" : classement += "A"
         return(classement)
       }
-      switch (e) {
-        case 0:
-          classement += "Zéro"
-          break;
-        case 1:
-          classement += "Quinze"
-          break;
-        case 2:
-          classement += "Trente"
-          break;
-        case 3:
-          classement += "Quarante"
-          break;
-      
-        default:
-          break;
+      if (i !== 2) {
+        switch (e) {
+          case 0:
+            classement += "Zéro"
+            break;
+          case 1:
+            classement += "Quinze"
+            break;
+          case 2:
+            classement += "Trente"
+            break;
+          case 3:
+            classement += "Quarante"
+            break;
+        
+          default:
+            return;
+        }
+        i === 0 ? classement += " - " : ""
+        i += 1
       }
-      i === 0 ? classement += " - " : ""
-      i += 1
     });
     
     return classement
