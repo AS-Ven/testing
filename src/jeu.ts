@@ -2,8 +2,31 @@ export default class Jeu {
   private joueurs: [string, string] = ["Alice", "Bob"]
   private score: [number, number] = [0 , 0]
 
-  public getScore(): [number, number] {
-    return this.score
+  public getScore(): string {
+    let classement = ""
+    let i = 0
+    this.score.forEach(e => {
+      switch (e) {
+        case 0:
+          classement += "Zéro"
+          break;
+        case 1:
+          classement += "Quinze"
+          break;
+        case 2:
+          classement += "Trente"
+          break;
+        case 3:
+          classement += "Quarante"
+          break;
+      
+        default:
+          break;
+      }
+      i === 0 ? classement += " - " : ""
+      i += 1
+    });
+    return classement
   }
 
   public getJoueurs() {

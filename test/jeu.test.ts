@@ -6,6 +6,6 @@ const JEU = new Jeu()
 describe("JeuTest", () => {
   it("Les points s'ajoutent correctement", () => {
     JEU.pointPour("Alice")
-    expect(JEU.getScore()).toEqual([1 , 0])
+    expect(JEU.getScore()).toBe("Quinze - Zéro")
   })
 })
