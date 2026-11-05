@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Jeu from '../src/jeu'
 import { Classement } from '../src/classement'
 
@@ -7,47 +7,42 @@ const JEU = new Jeu("Alice", "Bob", classement)
 
 describe("JEUTest", () => {
 
-  it("Les points s'ajoutent correctement", () => {
+  beforeEach(() => {
+    classement.enregistrer = vi.fn()
     JEU.resetScore()
+  })
+
+  const setScore = (player: string, score: number) => {
+    for (let i = 0; i < score; i++) {
+      JEU.pointPour(player)
+    }
+  }
+
+  it("Les points s'ajoutent correctement", () => {
     JEU.pointPour("Alice")
     expect(JEU.getScore()).toBe("Quinze - Zéro")
   })
 
   it("getScore() renvoie une Egalité", () => {
-    JEU.resetScore()
     JEU.pointPour("Alice")
     JEU.pointPour("Bob")
     expect(JEU.getScore()).toBe("Quinze - A")
   })
 
   it("getScore() renvoie Egalité", () => {
-    JEU.resetScore()
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Bob")
-    JEU.pointPour("Bob")
-    JEU.pointPour("Bob")
+    setScore("Alice", 3)
+    setScore("Bob", 3)
     expect(JEU.getScore()).toBe("Egalité")
   })
 
   it("Alice gagne le match", () => {
-    JEU.resetScore()
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
+    setScore("Alice", 4)
     expect(JEU.getScore()).toBe("Victoire Alice")
   })
   
   // J'utilise un spy car le vrai classement n'existe pas
   it("enregistre Alice comme vainqueur une seule fois", () => {
-    JEU.resetScore()
-    classement.enregistrer = vi.fn()
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
-    JEU.pointPour("Alice")
+    setScore("Alice", 4)
     JEU.pointPour("Alice")
 
     expect(classement.enregistrer).toHaveBeenCalledOnce()
@@ -56,12 +51,7 @@ describe("JEUTest", () => {
 
   // J'utilise un spy car le vrai classement n'existe pas et qu'un mock serait beaucoup pour si peu
   it("enregistre Bob comme vainqueur une seule fois", () => {
-    JEU.resetScore()
-    classement.enregistrer = vi.fn()
-    JEU.pointPour("Bob")
-    JEU.pointPour("Bob")
-    JEU.pointPour("Bob")
-    JEU.pointPour("Bob")
+    setScore("Bob", 4)
     JEU.pointPour("Bob")
 
     expect(classement.enregistrer).toHaveBeenCalledOnce()
