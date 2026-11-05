@@ -6,6 +6,10 @@ export default class Jeu {
     let classement = ""
     let i = 0
     this.score.forEach(e => {
+      if (i === 1 && e === this.score[0]) {
+        e === 3 ? classement = "Egalité" : classement += "A"
+        return(classement)
+      }
       switch (e) {
         case 0:
           classement += "Zéro"
@@ -26,11 +30,16 @@ export default class Jeu {
       i === 0 ? classement += " - " : ""
       i += 1
     });
+    
     return classement
   }
 
   public getJoueurs() {
     return this.joueurs
+  }
+
+  public resetScore() {
+    this.score = [0, 0]
   }
 
   public pointPour(joueur: string): void {
