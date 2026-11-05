@@ -1,6 +1,15 @@
+import { Classement } from "./classement"
+
 export default class Jeu {
-  private joueurs: [string, string] = ["Alice", "Bob"]
+  private joueurs: [string, string]
   private score: [number, number] = [0 , 0]
+  private matchTermine = false
+  private classement: Classement
+
+  public constructor(joueur1: string, joueur2: string, classement: Classement) {
+    this.joueurs = [joueur1, joueur2]
+    this.classement = classement
+  }
 
   public getScore(): string {
     let classement = ""
@@ -47,10 +56,16 @@ export default class Jeu {
 
   public resetScore() {
     this.score = [0, 0]
+    this.matchTermine = false
   }
 
   public pointPour(joueur: string): void {
     const id_player = this.joueurs.findIndex((e) => e === joueur)
     this.score[id_player] += 1
+
+    if (this.score[id_player] >= 4 && !this.matchTermine) {
+      this.matchTermine = true
+      this.classement.enregistrer(this.joueurs[id_player], this.joueurs[1 - id_player])
+    }
   } 
 }

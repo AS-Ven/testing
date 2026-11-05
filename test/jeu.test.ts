@@ -1,9 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import Jeu from '../src/jeu'
+import { Classement } from '../src/classement'
 
-const JEU = new Jeu()
+let classement: Classement = { enregistrer: vi.fn() }
+const JEU = new Jeu("Alice", "Bob", classement)
 
-describe("JeuTest", () => {
+describe("JEUTest", () => {
 
   it("Les points s'ajoutent correctement", () => {
     JEU.resetScore()
@@ -37,5 +39,32 @@ describe("JeuTest", () => {
     JEU.pointPour("Alice")
     expect(JEU.getScore()).toBe("Victoire Alice")
   })
+  
+  // J'utilise un spy car le vrai classement n'existe pas
+  it("enregistre Alice comme vainqueur une seule fois", () => {
+    JEU.resetScore()
+    classement.enregistrer = vi.fn()
+    JEU.pointPour("Alice")
+    JEU.pointPour("Alice")
+    JEU.pointPour("Alice")
+    JEU.pointPour("Alice")
+    JEU.pointPour("Alice")
 
+    expect(classement.enregistrer).toHaveBeenCalledOnce()
+    expect(classement.enregistrer).toHaveBeenCalledWith("Alice", "Bob")
+  })
+
+  // J'utilise un spy car le vrai classement n'existe pas et qu'un mock serait beaucoup pour si peu
+  it("enregistre Bob comme vainqueur une seule fois", () => {
+    JEU.resetScore()
+    classement.enregistrer = vi.fn()
+    JEU.pointPour("Bob")
+    JEU.pointPour("Bob")
+    JEU.pointPour("Bob")
+    JEU.pointPour("Bob")
+    JEU.pointPour("Bob")
+
+    expect(classement.enregistrer).toHaveBeenCalledOnce()
+    expect(classement.enregistrer).toHaveBeenCalledWith("Bob", "Alice")
+})
 })
